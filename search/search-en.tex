@@ -163,7 +163,7 @@ develop a divide and conquer $k$-selection algorithm, which is called quick sele
 \item Moves all elements which aren't greater than the pivot in a sub list $A$; and moves the rest to sub list $B$;
 \item Compare the length of $A$ with $k$, if $|A| = k - 1$, then the pivot is the $k$-th smallest one;
 \item If $|A| > k - 1$, recursively find the $k$-th smallest one among $A$;
-\item Otherwise, recursively find the $(k - |A|)$-th smallest one among $B$;
+\item Otherwise, recursively find the $(k - 1 - |A|)$-th smallest one among $B$;
 \end{enumerate}
 
 This algorithm can be formalized in below equation. Suppose $0 < k \leq |L|$ , where $L$ is a non-empty list of elements.
@@ -186,7 +186,7 @@ top(k, L) = \left \{
 partition(p, L) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  (\Phi, \Phi) & L = \Phi \\
+  (\phi, \phi) & L = \phi \\
   (\{ l_1 \} \cup A, B) & p(l_1), (A, B) = partition(p, L') \\
   (A, \{ l_1 \} \cup B) & \lnot p(l_1)
   \end{array}
@@ -214,7 +214,7 @@ than the pivot, we are done in just $O(n)$ time. The worst case is that either t
 minimum element is selected as the pivot every time. The partition always produces an empty
 sub list, that either $A$ or $B$ is empty. If we always pick the minimum as the pivot, the
 performance is bound to $O(kn)$. If we always pick the maximum as the pivot, the performance
-is $O((n-k)n)$. If $k$ is much less than $n$, it downgrades to quadratic $O(n^2)$ time.
+is $O((n-k)n)$.
 
 The best case (not the lucky case), is that the pivot always partition the list perfectly.
 The length of $A$ is nearly as same as the length of $B$. The list is halved
@@ -313,8 +313,7 @@ T(n) = c_1 lg n + c_2 n + T(\frac{n}{2})
 \ee
 
 Where $c_1$ and $c_2$ are constant factors for the median of median and partition computation respectively. Solving this
-equation with telescope method or the master theory in \cite{CLRS} gives the linear $O(n)$ performance. The detailed
-algorithm realization is left as exercise to the reader.
+equation with telescope method or the master theory in \cite{CLRS} gives the linear $O(n)$ performance.
 
 In case we just want to pick the top $k$ smallest elements, but don't care about the order of them, the algorithm can
 be adjusted a little bit to fit.
@@ -323,7 +322,7 @@ be adjusted a little bit to fit.
 tops(k, L) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  \Phi & k = 0 \lor L = \Phi \\
+  \phi & k = 0 \lor L = \phi \\
   A & |A| = k \\
   A \cup \{ l_1 \} \cup tops(k - |A| - 1, B) & |A| < k \\
   tops(k, A) & otherwise
@@ -386,7 +385,7 @@ My math teacher told us that, because the number we considered is within 1000, i
 numbers every time by designing good questions, the number will be found in 10 questions. This is because
 $2^{10} = 1024 > 1000$. However, it would be boring to just ask it is higher than 500, is lower
 than 250, ... Actually, the question `is it even' is very good, because it always
-halve the numbers.
+halve the numbers\footnote{When the author revise this chapter, Microsoft released a game in social networks. User can consider a person's name, the AI robot asks 16 questions next. The user only answers with yes or no. The robot will tell you who is that person. Can you figure out how the robot works?}.
 
 Come back to the binary search algorithm. It is only applicable to a sequence of ordered number.
 I've seen programmers tried to apply it to unsorted array, and took several hours to figure out
@@ -459,9 +458,9 @@ will downgrade to. Consider the following equation.
 bsearch(x, L) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  Err & L = \Phi \\
+  Err & L = \phi \\
   b_1 & x = b_1, (A, B) = splitAt(\lfloor \frac{|L|}{2} \rfloor, L) \\
-  bsearch(x, A) & B = \Phi \lor x < b_1 \\
+  bsearch(x, A) & B = \phi \lor x < b_1 \\
   bsearch(x, B') & otherwise
   \end{array}
 \right.
@@ -490,7 +489,7 @@ This results $O(n)$ time, which is as same as the brute force search from head t
 search(x, L) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  Err & L = \Phi \\
+  Err & L = \phi \\
   l_1 & x = l_1 \\
   search(x, L') & otherwise
   \end{array}
@@ -579,7 +578,7 @@ each column are in strict increasing order. Figure \ref{fig:matrix-eg} illustrat
     1 & 2 & 3 & 4 & ... \\
     2 & 4 & 5 & 6 & ... \\
     3 & 5 & 7 & 8 & ... \\
-    4 & 6 & 8 & 9 & ...
+    4 & 6 & 8 & 9 & ... \\
     ... \\
   \end{array}
 \right ]
@@ -633,7 +632,7 @@ brute force solution by embedded looping.
 
 \begin{algorithmic}[1]
 \Function{Solve}{$f, z$}
-  \State $A \gets \Phi$
+  \State $A \gets \phi$
   \For{$x \in \{0, 1, 2, ..., z\}$}
     \For{$y \in \{0, 1, 2, ..., z\}$}
       \If{$f(x, y) = z$}
@@ -685,7 +684,7 @@ $(p, q) = (0, z)$ as $solve(f, z) = search(f, z, 0, z)$
 search(f, z, p, q) =  \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  \Phi & p > z \lor q < 0 \\
+  \phi & p > z \lor q < 0 \\
   search(f, z, p + 1, q) & f(p, q) < z \\
   search(f, z, p, q - 1) & f(p, q) > z \\
   \{(p, q)\} \cup search(f, z, p + 1, q - 1) & otherwise
@@ -713,7 +712,7 @@ in a loop.
 \begin{algorithmic}[1]
 \Function{Solve}{$f, z$}
   \State $p \gets 0, q \gets z$
-  \State $S \gets \Phi$
+  \State $S \gets \phi$
   \While{$p \leq z \land q \geq 0$}
     \State $z' \gets f(p, q)$
     \If{$z' < z$}
@@ -863,7 +862,7 @@ And the improved saddleback search shrinks to this new search domain $solve(f, z
 search(f, z, p, q) =  \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  \Phi & p > n \lor q < 0 \\
+  \phi & p > n \lor q < 0 \\
   search(f, z, p + 1, q) & f(p, q) < z \\
   search(f, z, p, q - 1) & f(p, q) > z \\
   \{(p, q)\} \cup search(f, z, p + 1, q - 1) & otherwise
@@ -930,7 +929,7 @@ Utilize this algorithm, the boundaries $m$ and $n$ can be found before performin
   \State $m \gets$ \Call{Binary-Search}{$\lambda_y \cdot f(0, y), z, (0, z)$}
   \State $n \gets$ \Call{Binary-Search}{$\lambda_x \cdot f(x, 0), z, (0, z)$}
   \State $p \gets 0, q \gets m$
-  \State $S \gets \Phi$
+  \State $S \gets \phi$
   \While{$p \leq n \land q \geq 0$}
     \State $z' \gets f(p, q)$
     \If{$z' < z$}
@@ -965,7 +964,7 @@ As shown in the figure \ref{fig:saddleback-drop}.
  \label{fig:saddleback-drop}
 \end{figure}
 
-Suppose we are searching in a rectangle from the lower-left corner $(a, b)$ to the upper-right corner $(c, d)$.
+Suppose we are searching in a rectangle from the upper-left corner $(a, b)$ to the lower-right corner $(c, d)$.
 If the $(p, q)$ isn't the middle point, and $f(p, q) \neq z$. We can't ensure the area to be dropped is always
 1/4. However, if $f(p, q) = z$, as $f$ is strict increasing, we are not only sure both the lower-left and the
 upper-right sub areas can be thrown, but also all the other points in the column $p$ and row $q$. The problem
@@ -1028,7 +1027,7 @@ and bottom-right corner $(c, d)$.
 search_{(a, b), (c, d)} =  \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  \Phi & c < a \lor d < b \\
+  \phi & c < a \lor d < b \\
   csearch & c - a < b - d \\
   rsearch & otherwise
   \end{array}
@@ -1422,7 +1421,7 @@ $L'$ is the rest votes except for $l_1$. Below are the definition of this functi
 maj(c, n, L) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  c & L = \Phi \\
+  c & L = \phi \\
   maj(c, n + 1, L') & l_1 = c \\
   maj(l_1, 1, L') & n = 0 \land l_1 \neq c \\
   maj(c, n - 1, L') & otherwise
@@ -1439,7 +1438,7 @@ this number is not less than the half.
 majority(L) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  fail & L = \Phi \\
+  fail & L = \phi \\
   c & c = maj(l_1, 1, L'), |\{x | x \in L, x = c\}| > \%50 |L| \\
   fail & otherwise
   \end{array}
@@ -1553,7 +1552,7 @@ to record $A$ and $B$. In order to search the maximum sum of list $L$, we call t
 max_{sum}(A, B, L) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  A & L = \Phi \\
+  A & L = \phi \\
   max_{sum}(A', B', L') & otherwise
   \end{array}
 \right.
@@ -1844,7 +1843,7 @@ the if $t=p$, we can update the prefix part fast in constant time.
 The KMP matching algorithm starts by initializing the success prefix parts to empty strings as the following.
 
 \be
-search(P, T) = kmp(\pi, (\Phi, P) (\Phi, T))
+search(P, T) = kmp(\pi, (\phi, P) (\phi, T))
 \ee
 
 Where $\pi$ is the prefix function we explained before. The core part of KMP algorithm, except for the prefix function
@@ -1854,12 +1853,12 @@ building, can be defined as below.
 kmp(\pi, (\overleftarrow{P_p}, P_s), (\overleftarrow{T_p}, T_s)) =  \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  \{ |\overleftarrow{T_p}| \} & P_s = \Phi \land T_s = \Phi \\
-  \Phi & P_s \neq \Phi \land T_s = \Phi \\
-  \{ |\overleftarrow{T_p} \} \cup kmp(\pi, \pi(\overleftarrow{P_p}, P_s), (\overleftarrow{T_p}, T_s)) & P_s = \Phi \land T_s \neq \Phi \\
+  \{ |\overleftarrow{T_p}| \} & P_s = \phi \land T_s = \phi \\
+  \phi & P_s \neq \phi \land T_s = \phi \\
+  \{ |\overleftarrow{T_p} \} \cup kmp(\pi, \pi(\overleftarrow{P_p}, P_s), (\overleftarrow{T_p}, T_s)) & P_s = \phi \land T_s \neq \phi \\
   kmp(\pi, (\overleftarrow{P_p'}, P_s'), (\overleftarrow{T_p'}, T_s')) & t = p \\
-  kmp(\pi, \pi(\overleftarrow{P_p}, P_s), (\overleftarrow{T_p'}, T_s')) & t \neq p \land \overleftarrow{P_p} = \Phi \\
-  kmp(\pi, \pi(\overleftarrow{P_p}, P_s), (\overleftarrow{T_p}, T_s)) & t \neq p \land \overleftarrow{P_p} \neq \Phi
+  kmp(\pi, \pi(\overleftarrow{P_p}, P_s), (\overleftarrow{T_p'}, T_s')) & t \neq p \land \overleftarrow{P_p} = \phi \\
+  kmp(\pi, \pi(\overleftarrow{P_p}, P_s), (\overleftarrow{T_p}, T_s)) & t \neq p \land \overleftarrow{P_p} \neq \phi
   \end{array}
 \right.
 \ee
@@ -1910,8 +1909,8 @@ solution of such prefix enumeration can be realized as the following.
 prefixes(L) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  \{ \Phi \} & L = \Phi \lor |L| = 1 \\
-  cons(\Phi, map(\lambda_s \cdot cons(l_1, s), prefixes(L'))) & otherwise
+  \{ \phi \} & L = \phi \lor |L| = 1 \\
+  cons(\phi, map(\lambda_s \cdot cons(l_1, s), prefixes(L'))) & otherwise
   \end{array}
 \right.
 \ee
@@ -1956,7 +1955,7 @@ text string `The quick brown fox jumps over the lazy dog' turns into (T, 1), (h,
 (o, 42), (g, 43).
 
 The initial state for folding contains two parts, one is the pair of pattern $(P_p, P_s)$, with
-prefix starts from empty, and the suffix is the whole pattern string $(\Phi, P)$. For illustration
+prefix starts from empty, and the suffix is the whole pattern string $(\phi, P)$. For illustration
 purpose only, we revert back to normal pairs but not $(\overleftarrow{P_p}, P_s)$ notation.
 It can be easily replaced with reversed form in the finalized version. This is left as exercise
 to the reader. The other part
@@ -1965,7 +1964,7 @@ After the folding finishes, this list contains all solutions. What we need is to
 list from the final state. The core KMP search algorithm is simplified like this.
 
 \be
-kmp(P, T) = snd(fold(search, ((\Phi, P), \Phi), zip(T, \{1, 2, ... \})))
+kmp(P, T) = snd(fold(search, ((\phi, P), \phi), zip(T, \{1, 2, ... \})))
 \ee
 
 The only `black box' is the $search$ function, which takes a state, and a pair of character and index,
@@ -1976,9 +1975,9 @@ as $P_s'$ ($P_s = cons(p, P_s')$), we have the following definition.
 search(((P_p, P_s), L), (c, i)) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  ((P_p \cup {p}, P_s'), L \cup \{i\}) & p = c \land P_s' = \Phi \\
-  ((P_p \cup {p}, P_s'), L) & p = c \land P_s' \neq \Phi \\
-  ((P_p, P_s), L) & P_p = \Phi \\
+  ((P_p \cup {p}, P_s'), L \cup \{i\}) & p = c \land P_s' = \phi \\
+  ((P_p \cup {p}, P_s'), L) & p = c \land P_s' \neq \phi \\
+  ((P_p, P_s), L) & P_p = \phi \\
   search((\pi(P_p, P_s), L), (c, i)) & otherwise
   \end{array}
 \right.
@@ -2002,7 +2001,7 @@ as below.
 init(L) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  \Phi & |L| = 1 \\
+  \phi & |L| = 1 \\
   cons(l_1, init(L')) & otherwise
   \end{array}
 \right.
@@ -2017,7 +2016,7 @@ prefix-function can be modified as the following.
 \pi(P_p, P_s) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  (P_p, P_s) & P_p = \Phi \\
+  (P_p, P_s) & P_p = \phi \\
   fallback(init(P_p), cons(last(P_p), P_s)) & otherwise
   \end{array}
 \right.
@@ -2073,17 +2072,17 @@ the new state if match succeeds. Such definition is quite similar to the binary 
 
 Similar as imperative KMP algorithm, which builds the prefix function from the pattern string, the
 state transforming tree can also be built from the pattern. The idea is to build the tree from the
-very beginning state $(\Phi, P)$, with both its children empty. We replace the left child with a
+very beginning state $(\phi, P)$, with both its children empty. We replace the left child with a
 new state by calling $\pi$ function defined above, and replace the right child by advancing one character
-ahead. There is an edge case, that when the state transfers to $(P, \Phi)$, we can not advance any more
+ahead. There is an edge case, that when the state transfers to $(P, \phi)$, we can not advance any more
 in success case, such node only contains child for failure case.
 The build function is defined as the following.
 
 \be
-build((P_p, P_s), \Phi, \Phi) = \left \{
+build((P_p, P_s), \phi, \phi) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  build(\pi(P_p, P_s), \Phi, \Phi) & P_s = \Phi \\
+  build(\pi(P_p, P_s), \phi, \phi) & P_s = \phi \\
   build((P_p, P_s), L, R) & otherwise
   \end{array}
 \right.
@@ -2092,8 +2091,8 @@ build((P_p, P_s), \Phi, \Phi) = \left \{
 Where
 \[
 \begin{array}{l}
-L = build(\pi(P_p, P_s), \Phi, \Phi) \\
-R = build((P_s \cup \{p\}, P_s'), \Phi, \Phi))
+L = build(\pi(P_p, P_s), \phi, \phi) \\
+R = build((P_s \cup \{p\}, P_s'), \phi, \phi))
 \end{array}
 \]
 
@@ -2122,7 +2121,7 @@ pattern is successfully matched.
 match((P_p, P_s), L, R) =  \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  True & P_s = \Phi \\
+  True & P_s = \phi \\
   False & otherwise
   \end{array}
 \right.
@@ -2134,7 +2133,7 @@ With the help of state transform tree, we can realize KMP algorithm in an automa
 kmp(P, T) = snd(fold(search, (Tr, []), zip(T, \{1, 2, ... \})))
 \ee
 
-Where the tree $Tr = build((\Phi, P), \Phi, \Phi)$ is the infinite state transform tree.
+Where the tree $Tr = build((\phi, P), \phi, \phi)$ is the infinite state transform tree.
 Function $search$ utilizes this tree to transform the state according to match or fail.
 Denote the first character in $P_s$ as $p$, the rest characters as $P_s'$, and the matched
 positions found so far as $A$.
@@ -2145,7 +2144,7 @@ search((((P_p, P_s), L, R), A), (c, i)) = \left \{
   {r@{\quad:\quad}l}
   (R, A \cup \{ i \}) & p = c \land match(R) \\
   (R, A) & p = c \land \neg{match(R)} \\
-  ((((P_p, P_s), L, R), A) & P_p = \Phi \\
+  ((((P_p, P_s), L, R), A) & P_p = \phi \\
   search((L, A), (c, i)) & otherwise
   \end{array}
 \right.
@@ -2231,7 +2230,7 @@ when matching a character on this tree as the following.
 trans(T, c) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  root & T = \Phi \\
+  root & T = \phi \\
   R & T = ((P_p, P_s), L, R), c = p \\
   trans(L, c) & otherwise
   \end{array}
@@ -2261,7 +2260,7 @@ match. As defined above, there isn't right sub tree any more. Combining these ca
 build(T, (P_p, P_s)) =  \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  ((P_p, P_s), T, \Phi) & P_s = \Phi \\
+  ((P_p, P_s), T, \phi) & P_s = \phi \\
   ((P_p, P_s), T, build(trans(T, p), (P_p \cup \{ p \}, P_s'))) & otherwise
   \end{array}
 \right.
@@ -2270,7 +2269,7 @@ build(T, (P_p, P_s)) =  \left \{
 The last brick is to define the root of the infinite state transfer tree, which initializes the building.
 
 \be
-root = build(\Phi, (\Phi, P))
+root = build(\phi, (\phi, P))
 \ee
 
 And the new KMP matching algorithm is modified with this root.
@@ -2329,13 +2328,13 @@ The idea of Boyer-Moore algorithm comes from the following observation.
 When attempt to match the pattern, even if there are several characters from the
 left are same, it fails if the last one does not match, as shown in figure \ref{fig:bad-char}. What's more,
 we wouldn't find a match even if we slide the pattern down by 1, or 2. Actually, the length of the
-pattern `ananym' is 5, the last character is `m', however, the corresponding character in the
-text is `h'. It does not appear in the pattern at all. We can directly slide the pattern down by 5.
+pattern `ananym' is 6, the last character is `m', however, the corresponding character in the
+text is `h'. It does not appear in the pattern at all. We can directly slide the pattern down by 6.
 
 \begin{figure}[htbp]
  \centering
  \includegraphics[scale=0.5]{img/strstr.ps}
- \caption{Since character `h' doesn't appear in the pattern, we wouldn't find a match even if we slide the pattern
+ \caption{Since character `h' doesn't appear in the pattern, we wouldn't find a match if we slide the pattern
 down less than the length of the pattern.}
  \label{fig:bad-char}
 \end{figure}
@@ -2712,7 +2711,7 @@ and second half; However, we also need to find maximum sum cross the middle poin
 from the middle point to both ends as the following.
 \begin{algorithmic}[1]
 \Function{Max-Sum}{$A$}
-  \If{$A = \Phi$}
+  \If{$A = \phi$}
     \State \Return 0
   \ElsIf{$|A| = 1$}
     \State \Return \Call{Max}{$0, A[1]$}
@@ -2737,6 +2736,7 @@ from the middle point to both ends as the following.
 \end{algorithmic}
 It's easy to deduce the time performance is $T(n) = 2T(n/2) + O(n)$. Implement this algorithm in your
 favorite programming language.
+\item Given a $m \times n$ matrix contains postive and negative numbers, find the sub metrics with maximum sum of its elements.
 \item Given $n$ non-negative integers representing an elevation map where the width of each bar is 1,
 compute how much water it is able to trap after raining. Figure \ref{fig:rain-fill} shows an example.
 \begin{figure}[htbp]
@@ -2850,7 +2850,7 @@ We skip all the visited candidates and only try those new ones. The correspondin
 defined like this.
 
 \be
-solveMaze(m, s, e) = solve(s, \{ \Phi \})
+solveMaze(m, s, e) = solve(s, \{ \phi \})
 \label{eq:solve-maze-reversed}
 \ee
 
@@ -2883,7 +2883,7 @@ in equation (\ref{eq:solve-maze-reversed})\footnote{the detailed definition of $
 be found in the appendix A.}:
 
 \be
-solveMaze(m, s, e) = map(reverse, solve(s, \{ \Phi \}))
+solveMaze(m, s, e) = map(reverse, solve(s, \{ \phi \}))
 \ee
 
 We need define functions $adj(p)$ and $visited(p)$, which finds all the connected
@@ -2986,10 +2986,10 @@ the following.
 solve'(S) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  \Phi & S = \Phi \\
+  \phi & S = \phi \\
   s_1 & s_1 = e \\
-  solve'(S') & C = \{ c | c \in adj(p_1), c \not\in P' \} = \Phi \\
-  solve'(\{ \{p\}\cup P | p \in C\} \cup S) & otherwise, C \neq \Phi
+  solve'(S') & C = \{ c | c \in adj(p_1), c \not\in P' \} = \phi \\
+  solve'(\{ \{p\}\cup P | p \in C\} \cup S) & otherwise, C \neq \phi
   \end{array}
 \right.
 \ee
@@ -3030,10 +3030,10 @@ path $P$. The imperative algorithm can be given as below.
 
 \begin{algorithmic}[1]
 \Function{Solve-Maze}{$m, s, e$}
-  \State $S \gets \Phi$
+  \State $S \gets \phi$
   \State \Call{Push}{$S, \{ s \}$}
-  \State $L \gets \Phi$ \Comment{the result list}
-  \While{$S \neq \Phi$}
+  \State $L \gets \phi$ \Comment{the result list}
+  \While{$S \neq \phi$}
     \State $P \gets$ \Call{Pop}{$S$}
     \If{$e = p_n$}
       \State \Call{Add}{$L, P$}
@@ -3142,7 +3142,7 @@ necessary. This process terminates when all the columns in the first row have be
 examined. The below equation starts the search.
 
 \be
-solve(\{\Phi\}, \Phi)
+solve(\{\phi\}, \phi)
 \ee
 
 In order to manage the candidate attempts, a stack $S$ is used as same as in the maze
@@ -3156,7 +3156,7 @@ after pops $s_1$, the stack becomes $S'$. The $solve$ function can be defined as
 solve(S, L) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  L & S = \Phi \\
+  L & S = \phi \\
   solve(S', \{s_1\} \cup L) & |s_1| = 8 \\
   solve(\left \{
       \begin{array}{rl}
@@ -3217,9 +3217,9 @@ algorithm can be described as the following.
 
 \begin{algorithmic}[1]
 \Function{Solve-Queens}{}
-  \State $S \gets \{\Phi\}$
-  \State $L \gets \Phi$ \Comment{The result list}
-  \While{$S \neq \Phi$}
+  \State $S \gets \{\phi\}$
+  \State $L \gets \phi$ \Comment{The result list}
+  \While{$S \neq \phi$}
     \State $A \gets$ \Call{Pop}{$S$} \Comment{$A$ is an intermediate assignment}
     \If{$|A|=8$}
       \State \Call{Add}{$L, A$}
@@ -3251,7 +3251,7 @@ if any diagonal lines are formed with existing queens.
 \Function{Valid}{$x, A$}
   \State $y \gets 1 + |A|$
   \For{$i \gets 1$ to $|A|$}
-    \If{$x = i \lor |y-i| = |x - A[i]|$}
+    \If{$x = A[i] \lor |y-i| = |x - A[i]|$}
       \State \Return False
     \EndIf
   \EndFor
@@ -3289,9 +3289,9 @@ are valid and thus further expanded. Only those columns haven't been occupied by
 previous queens are tried. The algorithm only examines 15720, which is far
 less than $8^8 = 16777216$, possibilities \cite{wiki-8-queens}.
 
-It's quite easy to extend the algorithm, so that it can solve $N$ queens puzzle, where
-$N \geq 4$. However, the time cost increases fast. The backtrack algorithm is just
-slightly better than the one permuting the sequence of 1 to 8 (which is bound to $o(N!)$).
+It's quite easy to extend the algorithm, so that it can solve $n$ queens puzzle, where
+$n \geq 4$. However, the time cost increases fast. The backtrack algorithm is just
+slightly better than the one permuting the sequence of 1 to 8 (which is bound to $o(n!)$).
 Another extension to the algorithm is based on the fact that the chess board is
 square, which is symmetric both vertically and horizontally. Thus a solution can
 generate other solutions by rotating and flipping. These aspects are left as
@@ -3351,7 +3351,7 @@ We can record the state and try one of these 4 options at every step. Of course 
 are possible at any time. If get stuck, we can backtrack and try other options.
 
 As we restrict the left side frogs only moving to the right, and the right frogs only
-moving to the left. The moves are not reversible. There won't be any repetition cases as
+moving to the left, the moves are not reversible. There won't be any repetition cases as
 what we have to deal with in the maze puzzle. However, we still need record the steps
 in order to print them out finally.
 
@@ -3378,7 +3378,7 @@ well as the historic movements. The stack is initialized with a singleton list
 of starting state. The solution is accumulated to a list $M$, which is empty at the beginning:
 
 \be
-solve(\{\{-1, -1, -1, 0, 1, 1, 1\}\}, \Phi)
+solve(\{\{-1, -1, -1, 0, 1, 1, 1\}\}, \phi)
 \ee
 
 As far as the stack isn't empty, we pop one intermediate attempt. If
@@ -3393,7 +3393,7 @@ defined as the following.
 solve(S, M) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  M & S = \Phi \\
+  M & S = \phi \\
   solve(S', \{reverse(s_1)\} \cup M) & L = \{1, 1, 1, 0, -1, -1, -1\} \\
   solve(P \cup S', M) & otherwise
   \end{array}
@@ -3467,8 +3467,8 @@ state \{-1, -1, ..., -1, 0, 1, 1, ..., 1\} as $s$, and the mirrored end state as
 \begin{algorithmic}[1]
 \Function{Solve}{$s, e$}
   \State $S \gets \{\{s\}\}$
-  \State $M \gets \Phi$
-  \While{$S \neq \Phi$}
+  \State $M \gets \phi$
+  \While{$S \neq \phi$}
     \State $s_1 \gets$ \Call{Pop}{$S$}
     \If{$s_1[1] = e$}
       \State \textproc{Add}($M$, \Call{Reverse}{$s_1$})
@@ -3673,14 +3673,14 @@ second try. This queue helps to ensure our rule.
 
 We can use the quite same idea to solve our puzzle. The two banks of the river can be
 represented as two sets $A$ and $B$. $A$ contains the wolf, the goat, the cabbage and
-the farmer; while $B$ is empty. We take an element from one set to the other
+the farmer; while $B$ is empty. We take an element along with the farmer from one set to the other
 each time. The two sets can't hold conflict things if the farmer is absent. The goal is
 to exchange the contents of $A$ and $B$ with fewest steps.
 
-We initialize a queue with state $A = \{w, g, c, p\}, B=\Phi$ as the only element.
+We initialize a queue with state $A = \{w, g, c, p\}, B=\phi$ as the only element.
 As far as the queue isn't empty, we pick the first element from the head, expand it
 with all possible options, and put these new expanded candidates to the tail of the queue.
-If the first element on the head is the final goal, that $A=\Phi, B=\{w, g, c, p\}$,
+If the first element on the head is the final goal, that $A=\phi, B=\{w, g, c, p\}$,
 we are done. Figure \ref{fig:bfs-tree} illustrates the idea of this search order.
 Note that as all possibilities in the same level are examined, there is no need for
 back-tracking.
@@ -3727,7 +3727,7 @@ With these notations, the solution function is defined like below.
 solve(Q) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  \Phi & Q = \Phi \\
+  \phi & Q = \phi \\
   reverse(M) & A' = 0 \\
   solve(EnQ'(Q', \left \{
     \begin{array}{rl}
@@ -3814,10 +3814,10 @@ tail of the queue for further searching.
 
 \begin{algorithmic}[1]
 \Function{Solve}{}
-  \State $S \gets \Phi$
-  \State $Q \gets \Phi$
+  \State $S \gets \phi$
+  \State $Q \gets \phi$
   \State \Call{EnQ}{$Q, \{(15, 0)\}$}
-  \While{$Q \neq \Phi$}
+  \While{$Q \neq \phi$}
     \State $C \gets $ \Call{DeQ}{$Q$}
     \If{$c_1 = (0, 15)$}
       \State \textproc{Add}($S$, \Call{Reverse}{$C$})
@@ -4092,7 +4092,7 @@ Second, we assume $x>0$, to form a procedure to fill jug $A$ with $x$ times.
 However, the extended Euclid algorithm doesn't ensure $x$ to be positive.
 For instance $gcd_{ext}(4, 9) = (1, -2, 1)$. Whenever we get a negative
 $x$, since $d = x a + y b$, we can continuously add $b$ to $x$, and decrease
-$y$ by $a$ till $a$ is greater than zero.
+$y$ by $a$ till $x$ is greater than zero.
 
 At this stage, we are able to give the complete solution to the 2 water jugs
 puzzle. Below is an example Haskell program.
@@ -4172,7 +4172,7 @@ becomes $Q'$. This algorithm can be defined like below:
 solve'(Q) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  \Phi & Q = \Phi \\
+  \phi & Q = \phi \\
   reverse(S) & p = g \lor q = g \\
   solve'(EnQ'(Q', \{\{s'\} \cup S' | s' \in try(S)\})) & otherwise
   \end{array}
@@ -4272,9 +4272,9 @@ can be realized based on this idea as below.
 
 \begin{algorithmic}[1]
 \Function{Solve}{$a, b, g$}
-  \State $Q \gets \Phi$
+  \State $Q \gets \phi$
   \State \Call{Push-and-record}{$Q$, (0, 0)}
-  \While{$Q \neq \Phi$}
+  \While{$Q \neq \phi$}
     \State $s \gets$ \Call{Pop}{$Q$}
     \If{$p(s) = g \lor q(s) = g$}
       \State \Return $s$
@@ -4597,7 +4597,7 @@ to this layout as $S$. The algorithm can be defined as the following.
 solve(Q, H) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  \Phi & Q = \Phi \\
+  \phi & Q = \phi \\
   reverse(S) & L[10] = \{(4, 2), (4, 3), (5, 2), (5, 3)\} \\
   solve(Q', H') & otherwise
   \end{array}
@@ -4648,7 +4648,7 @@ type Move = (Integer, Point)
 data Ops = Op Layout [Move]
 \end{lstlisting}
 
-The main program is almost as same as the $sort(Q, H)$ function defined above.
+The main program is almost as same as the $solve(Q, H)$ function defined above.
 
 \lstset{language=Haskell}
 \begin{lstlisting}
@@ -4741,9 +4741,9 @@ The following algorithm takes a starting layout, and searches for best moving se
 \begin{algorithmic}[1]
 \Function{Solve}{$L_0$}
   \State $H \gets ||L_0||$
-  \State $Q \gets \Phi$
+  \State $Q \gets \phi$
   \State \textproc{Push}($Q$, \Call{Link}{$L_0$, NIL})
-  \While{$Q \neq \Phi$}
+  \While{$Q \neq \phi$}
     \State $L \gets $ \Call{Pop}{$Q$}
     \If{$L[10] = \{(4, 2), (4, 3), (5, 2), (5, 3)\}$}
       \State \Return $L$
@@ -4768,17 +4768,17 @@ class Node:
         self.parent = p
 
 def solve(start):
-    visit = [normalize(start)]
-    queue = [Node(start)]
-    while queue != []:
-        cur = queue.pop(0)
+    visit = set([normalize(start)])
+    queue = deque([Node(start)])
+    while queue:
+        cur = queue.popleft()
         layout = cur.layout
         if layout[-1] == [(4, 2), (4, 3), (5, 2), (5, 3)]:
             return cur
         else:
             for brd in expand(layout, visit):
                 queue.append(Node(brd, cur))
-                visit.append(normalize(brd))
+                visit.add(normalize(brd))
     return None # no solution
 \end{lstlisting}
 
@@ -4787,7 +4787,7 @@ Where \texttt{normalize} and \texttt{expand} are implemented as below:
 \lstset{language=Python}
 \begin{lstlisting}
 def normalize(layout):
-    return sorted([sorted(r) for r in layout])
+    return tuple(sorted([tuple(sorted(r)) for r in layout]))
 
 def expand(layout, visit):
     def bound(y, x):
@@ -4796,7 +4796,7 @@ def expand(layout, visit):
         return m[y - 1][x - 1] in [0, i]
     def unique(brd):
         (m, n) = (normalize(brd), normalize(mirror(brd)))
-        return all(m != v and n != v for v in visit)
+        return m not in visit and n not in visit
     s = []
     d = [(0, -1), (0, 1), (-1, 0), (1, 0)]
     m = matrix(layout)
@@ -5093,7 +5093,7 @@ initialized as the two minimum ones. An empty accumulator is passed as the last
 argument.
 
 \be
-extract(A) = extract'(min(T_1, T_2), max(T_1, T_2), \{T_3, T_4, ... \}, \Phi)
+extract(A) = extract'(min(T_1, T_2), max(T_1, T_2), \{T_3, T_4, ... \}, \phi)
 \ee
 
 For every tree, if its weight is less than the smallest two we've ever found, we
@@ -5105,7 +5105,7 @@ process can be defined as the following.
 extract'(T_a, T_b, A, B) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  (T_a, T_b, B) & A = \Phi \\
+  (T_a, T_b, B) & A = \phi \\
   extract'(T_a', T_b', A', \{T_b\} \cup A) & T_1 < T_b\\
   extract'(T_a, T_b, A', \{T_1\} \cup A) & otherwise
   \end{array}
@@ -5201,7 +5201,7 @@ merging.
 reduce(T, H) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  T & H = \Phi \\
+  T & H = \phi \\
   build(insert(merge(T, top(H)), pop(H))) & otherwise
   \end{array}
 \right.
@@ -5229,7 +5229,7 @@ put back to the heap. The final tree left in the heap is the result Huffman tree
   \State \Call{Build-Heap}{$A$}
   \While{$|A| > 1$}
     \State $T_a \gets$ \Call{Heap-Pop}{$A$}
-    \State $T_b \gets$ \Call{Heap-Pop}{$B$}
+    \State $T_b \gets$ \Call{Heap-Pop}{$A$}
     \State \textproc{Heap-Push}($A$, \Call{Merge}{$T_a, T_b$})
   \EndWhile
   \State \Return \Call{Heap-Pop}{$A$}
@@ -5277,7 +5277,7 @@ left in the queue. This tree is the result Huffman tree. This process starts
 by passing an empty queue as below.
 
 \be
-build'(A) = reduce'(extract''(\Phi, A))
+build'(A) = reduce'(extract''(\phi, A))
 \ee
 
 Suppose $A$ is in ascending order by weight, At any time, the tree with the
@@ -5290,8 +5290,8 @@ Function $extract''$ can be defined like the following.
 extract''(Q, A) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  (T_b, (Q, A')) & Q = \Phi \\
-  (T_a, (Q', A)) & A = \Phi \lor T_a < T_b \\
+  (T_b, (Q, A')) & Q = \phi \\
+  (T_a, (Q', A)) & A = \phi \lor T_a < T_b \\
   (T_b, (Q, A')) & otherwise
   \end{array}
 \right.
@@ -5306,7 +5306,7 @@ reduce'(T, (Q, A)) = \\
 \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  T & Q = \Phi \land A = \Phi \\
+  T & Q = \phi \land A = \phi \\
   reduce'(extract''(push(Q'', merge(T, T')), A'')) & otherwise
   \end{array}
 \right.
@@ -5339,9 +5339,9 @@ This algorithm can also be realized imperatively.
 
 \begin{algorithmic}[1]
 \Function{Huffman''}{$A$} \Comment{$A$ is ordered by weight}
-  \State $Q \gets \Phi$
+  \State $Q \gets \phi$
   \State $T \gets$ \Call{Extract}{$Q, A$}
-  \While{$Q \neq \Phi \lor A \neq \Phi$}
+  \While{$Q \neq \phi \lor A \neq \phi$}
     \State \textproc{Push}($Q$, \textproc{Merge}($T$, \Call{Extract}{$Q, A$}))
     \State $T \gets$ \Call{Extract}{$Q, A$}
   \EndWhile
@@ -5350,12 +5350,12 @@ This algorithm can also be realized imperatively.
 \end{algorithmic}
 
 Where function \textproc{Extract}($Q, A$) extracts the tree with the smallest weight from
-the queue and the list. It mutates the queue and tree if necessary. Denote
-the head of the queue is $T_a$, and the first element of the list as $T_b$.
+the queue and the array of trees. It mutates the queue and array if necessary. Denote
+the head of the queue is $T_a$, and the first element of the array as $T_b$.
 
 \begin{algorithmic}[1]
 \Function{Extract}{$Q, A$}
-  \If{$Q \neq \Phi \land (A = \Phi \lor T_a < T_b)$}
+  \If{$Q \neq \phi \land (A = \phi \lor T_a < T_b)$}
     \State \Return \Call{Pop}{$Q$}
   \Else
     \State \Return \Call{Detach}{$A$}
@@ -5425,7 +5425,7 @@ we append a zero to the prefix if turn left, and append a one if turn right. Whe
 a leaf node is arrived, the symbol represented by this node and the prefix are put
 to the code table. Denote the symbol of a leaf node as $c$, the children for tree
 $T$ as $T_l$ and $T_r$
-respectively. The code table association list can be built with $code(T, \Phi)$,
+respectively. The code table association list can be built with $code(T, \phi)$,
 which is defined as below.
 
 \be
@@ -5466,7 +5466,7 @@ definition realizes the decoding algorithm.
 decode(T, B) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  \{c\} & B = \Phi \land leaf(T) \\
+  \{c\} & B = \phi \land leaf(T) \\
   \{c\} \cup decode(root(T), B) & leaf(T) \\
   decode(T_l, B') & b_1 = 0 \\
   decode(T_r, B') & otherwise
@@ -5491,7 +5491,7 @@ realization, where the index keeps increasing by one.
 
 \begin{algorithmic}[1]
 \Function{Decode}{$T, B$}
-  \State $W \gets \Phi$
+  \State $W \gets \phi$
   \State $n \gets |B|, i \gets 1$
   \While{$i < n$}
     \State $R \gets T$
@@ -5563,7 +5563,7 @@ change coins can be generated as below.
 change(X, C) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  \Phi & X = 0 \\
+  \phi & X = 0 \\
   \{ c_m \} \cup change(X-c_m, C) &
       \begin{array}{l}
         otherwise, \\
@@ -5603,7 +5603,7 @@ a imperative looping.
 
 \begin{algorithmic}[1]
 \Function{Change}{$X, C$}
-  \State $R \gets \Phi$
+  \State $R \gets \phi$
   \While{$X \neq 0$}
     \State $c_m = max(\{c \in C, c \leq X\})$
     \State $R \gets \{c_m\} \cup R$
@@ -5708,7 +5708,7 @@ The optimal substructure can be expressed recursively as the following.
 change(X) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  \Phi & X = 0 \\
+  \phi & X = 0 \\
   least(\{c \cup change(X-c) | c \in C, c \leq X\}) & otherwise
   \end{array}
 \right.
@@ -5795,13 +5795,13 @@ we look up this table for smaller changing values. Whenever a intermediate
 value is calculated, it is stored in the table.
 
 \begin{algorithmic}[1]
-\State $T \gets \{\Phi, \Phi, ...\}$
+\State $T \gets \{\phi, \phi, ...\}$
 \Function{Change}{$X$}
-  \If{$X > 0 \land T[X] = \Phi$}
+  \If{$X > 0 \land T[X] = \phi$}
     \For{$c \in C$}
       \If{$c \leq X$}
         \State $C_m \gets \{c\} \cup$ \Call{Change}{$X-c$}
-        \If{$T[X] = \Phi \lor |C_m| < |T[X]|$}
+        \If{$T[X] = \phi \lor |C_m| < |T[X]|$}
           \State $T[X] \gets C_m$
         \EndIf
       \EndIf
@@ -5811,7 +5811,7 @@ value is calculated, it is stored in the table.
 \EndFunction
 \end{algorithmic}
 
-The solution to change 0 money is definitely empty $\Phi$, otherwise, we look up
+The solution to change 0 money is definitely empty $\phi$, otherwise, we look up
 $T[X]$ to retrieve the solution to change $X$ money. If it is empty, we need
 recursively calculate it. We examine all coins in the coin system $C$ which is
 not greater than $X$. This is the sub problem of making changes for money $X-c$.
@@ -5858,7 +5858,7 @@ At this stage, the solution table looks like below
 \hline
 0 & 1 & 2 & 3 & 4 \\
 \hline
-$\Phi$ & $\{1\}$ & $\{1, 1\}$ & $\{1, 1, 1\}$ & $\{1, 1, 1, 1\}$ \\
+$\phi$ & $\{1\}$ & $\{1, 1\}$ & $\{1, 1, 1\}$ & $\{1, 1, 1, 1\}$ \\
 \hline
 \end{tabular}
 
@@ -5871,7 +5871,7 @@ So the solution table can be extended to this.
 \hline
 0 & 1 & 2 & 3 & 4 & 5 \\
 \hline
-$\Phi$ & $\{1\}$ & $\{1, 1\}$ & $\{1, 1, 1\}$ & $\{1, 1, 1, 1\}$ & $\{ 5 \}$ \\
+$\phi$ & $\{1\}$ & $\{1, 1\}$ & $\{1, 1, 1\}$ & $\{1, 1, 1, 1\}$ & $\{ 5 \}$ \\
 \hline
 \end{tabular}
 
@@ -5904,10 +5904,10 @@ The following algorithm realizes this bottom-up idea.
 
 \begin{algorithmic}[1]
 \Function{Change}{$X$}
-  \State $T \gets \{ \Phi, \Phi, ... \}$
+  \State $T \gets \{ \phi, \phi, ... \}$
   \For{$i \gets 1$ to $X$}
     \For{$c \in C, c \leq i$}
-      \If{$T[i] = \Phi \lor 1 + |T[i - c]| < |T[i]|$}
+      \If{$T[i] = \phi \lor 1 + |T[i - c]| < |T[i]|$}
         \State $T[i] \gets \{ c \} \cup T[i-c]$
       \EndIf
     \EndFor
@@ -6049,7 +6049,7 @@ After the solution table is built, the coins needed can be generated from it.
 make(X, T) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  \Phi & X = 0 \\
+  \phi & X = 0 \\
   \{c\} \cup make(X-c, T) & otherwise, (n, c) = T[X]
   \end{array}
 \right.
@@ -6127,7 +6127,7 @@ the below definition.
 LCS(X, Y) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  \Phi & X = \Phi \lor Y = \Phi \\
+  \phi & X = \phi \lor Y = \phi \\
   \{x_1\} \cup LCS(X', Y') & x_1 = y_1 \\
   longer(LCS(X, Y'), LCS(X', Y)) & otherwise
   \end{array}
@@ -6191,19 +6191,19 @@ and column hold the empty strings.
 \hline
  & & a & n & t & e & n & n & a \\
 \hline
- & & $\Phi$ & $\Phi$ & $\Phi$ & $\Phi$ & $\Phi$ & $\Phi$ & $\Phi$ \\
+ & & $\phi$ & $\phi$ & $\phi$ & $\phi$ & $\phi$ & $\phi$ & $\phi$ \\
 \hline
-b & $\Phi$ & & & & & & & \\
+b & $\phi$ & & & & & & & \\
 \hline
-a & $\Phi$ & & & & & & & \\
+a & $\phi$ & & & & & & & \\
 \hline
-n & $\Phi$ & & & & & & & \\
+n & $\phi$ & & & & & & & \\
 \hline
-a & $\Phi$ & & & & & & & \\
+a & $\phi$ & & & & & & & \\
 \hline
-n & $\Phi$ & & & & & & & \\
+n & $\phi$ & & & & & & & \\
 \hline
-a & $\Phi$ & & & & & & & \\
+a & $\phi$ & & & & & & & \\
 \hline
 \end{tabular}
 
@@ -6216,9 +6216,9 @@ solution with such a table.
   \State $m \gets |X|, n \gets |Y|$
   \State $m' \gets m+1, n' \gets n+1$
   \If{$T =$ NIL}
-    \State $T \gets \{\{\Phi, \Phi, ..., \Phi\}, \{\Phi, NIL, NIL, ...\}, ...\}$ \Comment{$m' \times n'$}
+    \State $T \gets \{\{\phi, \phi, ..., \phi\}, \{\phi, NIL, NIL, ...\}, ...\}$ \Comment{$m' \times n'$}
   \EndIf
-  \If{$X \neq \Phi \land Y \neq \Phi \land T[m'][n'] =$ NIL}
+  \If{$X \neq \phi \land Y \neq \phi \land T[m'][n'] =$ NIL}
     \If{$X[m] = Y[n]$}
       \State $T[m'][n'] \gets$ \textproc{Append}(\Call{LCS}{$X[1..m-1], Y[1..n-1]$}, $X[m]$)
     \Else
@@ -6275,7 +6275,7 @@ initialized with all values set as 0.
 \Statex
 \Function{Get}{$T, X, Y, i, j$}
   \If{$i = 0 \lor j = 0$}
-    \State \Return $\Phi$
+    \State \Return $\phi$
   \ElsIf{$X[i] = Y[j]$}
     \State \Return \textproc{Append}(\Call{Get}{$T, X, Y, i-1, j-1$}, $X[i]$)
   \ElsIf{$T[i-1][j] > T[i][j-1]$}
@@ -6297,7 +6297,7 @@ After that, a back-track is performed to construct the longest common subsequenc
 time we start from the bottom-right corner of the table. If the last elements in $X$
 and $Y$ are same, we put this element as the last one of the result, and
 go on looking up the cell along the diagonal line; Otherwise, we compare the values in
-the left cell and the right cell, and go on looking up the cell with the bigger value.
+the left cell and the above cell, and go on looking up the cell with the bigger value.
 
 The following example Python program implements this algorithm.
 
@@ -6375,7 +6375,7 @@ $get$ can be defined as the following.
 get((\overleftarrow{X}, i), (\overleftarrow{Y}, j)) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  \Phi & \overleftarrow{X} = \Phi \land \overleftarrow{Y} = \Phi \\
+  \phi & \overleftarrow{X} = \phi \land \overleftarrow{Y} = \phi \\
   get((\overleftarrow{X}', i-1), (\overleftarrow{Y}', j-1)) \cup \{x\} & x = y \\
   get((\overleftarrow{X}', i-1), (\overleftarrow{Y}, j)) & T[i-1][j] > T[i][j-1] \\
   get((\overleftarrow{X}, i), (\overleftarrow{Y}', j-1)) & otherwise
@@ -6438,7 +6438,7 @@ The following equation defines this algorithm.
 solve(X, s) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  \Phi & X = \Phi \\
+  \phi & X = \phi \\
   \{\{x_1\}\} \cup solve(X', s) & x_1 = s \\
   solve(X', s) \cup \{ \{x_1\} \cup S | S \in solve(X', s-x_1)\} & otherwise
   \end{array}
@@ -6503,7 +6503,7 @@ $x_2$ & F & F & ... & T & ... & T & ... & T & ... & F \\
 \end{tabular}
 
 Generally speaking, when fill the $i$-th row, all the possible sums
-constructed with $\{x_1, x_2, ..., x_{i-1}$ so far
+constructed with $\{x_1, x_2, ..., x_{i-1}\}$ so far
 can also be achieved with $x_i$. So the cells previously are true
 should also be true in this new row. The cell represents value $x_i$
 should also be true since the singleton set $\{x_i\}$ sums to it.
@@ -6575,7 +6575,7 @@ we add element $x_n$ to construct a new subset, which sums to $s$.
 
 \begin{algorithmic}[1]
 \Function{Get}{$X, s, T, n$}
-  \State $S \gets \Phi$
+  \State $S \gets \phi$
   \If{$X[n] = s$}
     \State $S \gets S \cup \{X[n]\}$
   \EndIf
@@ -6621,7 +6621,7 @@ to $s$ contains the final result.
 \Function{Subset-Sum}{$X, s$}
   \State $s_l \gets \sum \{x \in X, x < 0\}$
   \State $s_u \gets \sum \{x \in X, x > 0\}$
-  \State $T \gets \{\Phi, \Phi, ...\}$ \Comment{$s_u - s_l + 1$}
+  \State $T \gets \{\phi, \phi, ...\}$ \Comment{$s_u - s_l + 1$}
   \For{$x \in X$}
     \State $T' \gets$ \Call{Duplicate}{$T$}
     \For{$j \gets s_l$ to $s_u$}
@@ -6629,7 +6629,7 @@ to $s$ contains the final result.
       \If{$x = j$}
         \State $T'[j] \gets T'[j] \cup \{x\}$
       \EndIf
-      \If{$s_l \leq j' \leq s_u \land T[j'] \neq \Phi$}
+      \If{$s_l \leq j' \leq s_u \land T[j'] \neq \phi$}
         \State $T'[j] \gets T'[j] \cup \{\{x\} \cup S | S \in T[j']\}$
       \EndIf
     \EndFor
@@ -6666,7 +6666,7 @@ from $s_l$ to $s_u$. It is initialized with all empty values as in the following
 equation.
 
 \be
-subsetsum(X, s) = fold(build, \{\Phi, \Phi, ..., \}, X)[s]
+subsetsum(X, s) = fold(build, \{\phi, \phi, ..., \}, X)[s]
 \ee
 
 After folding, the solution table is built, the answer is looked up at
@@ -6689,7 +6689,7 @@ build(T, x) = fold(f, T, \{s_l, s_l+1, ..., s_u\})
 f(T, j) = \left \{
   \begin{array}
   {r@{\quad:\quad}l}
-  T'[j] \cup \{\{x\} \cup Y | Y \in T[j']\} & s_l \leq j' \leq s_u \land T[j'] \neq \Phi, j' = j - x \\
+  T'[j] \cup \{\{x\} \cup Y | Y \in T[j']\} & s_l \leq j' \leq s_u \land T[j'] \neq \phi, j' = j - x \\
   T' & otherwise
   \end{array}
 \right.
@@ -6753,7 +6753,7 @@ the puzzle is solvable by testing with GCD, we can blindly execute the process t
 fill $A$, pour $A$ into $B$, whenever $B$ is full, empty it till there is expected volume
 in one jug. Realize this solution. Can this one find faster solution than the original
 version?
-\item Compare to the extended Euclid method, the DFS approach is a kind of brute-force searching.
+\item Compare to the extended Euclid method, the BFS approach is a kind of brute-force searching.
 Improve the extended Euclid approach by finding the best linear combination which minimize
 $|x| + |y|$.
 \item John Horton Conway introduced the sliding tile puzzle. Figure \ref{fig:conway7} shows a
@@ -6778,6 +6778,13 @@ Implement this approach in your favorite programming language.
 \item Given a list of non-negative integers, find the maximum sum composed by numbers that none
 of them are adjacent.
 % refer to others/problems/DP/non-adjcent-sum/
+\item Levenshtein edit distance is defined as the cost of converting from one string $s$ to another string $t$. It is widely used in spell-checking, OCR correction etc. There are three operations allowed in Levenshtein edit distance. Insert a character; delete a character; and substitute a character. Each operation mutate one character a time. The following exaple shows how to convert string ``kitten'' to ``sitting''. The Levenshtein edit distance is 3 in this case.
+  \begin{enumerate}
+  \item \underline{k}itten $\rightarrow$ \underline{s}itten (substitution of 's' for 'k');
+  \item sitt\underline{e}n $\rightarrow$ sitt\underline{i}n (substitution of 'i' for 'e');
+  \item sitten $\rightarrow$ sittin\underline{g} (insertion of 'g' at the end).
+  \end{enumerate}
+Develop a program to calculate Levenshtein edit distance for two strings with Dynamic Programming.
 \end{itemize}
 \end{Exercise}
 
